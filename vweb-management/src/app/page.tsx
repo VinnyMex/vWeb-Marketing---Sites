@@ -14,6 +14,7 @@ interface SiteInfo {
   filesCount: number;
   port: number;
   status: 'online' | 'offline';
+  prodUrl?: string;
 }
 
 function countFiles(dir: string): number {
@@ -51,12 +52,14 @@ export default function Home() {
         let description = "Site gerenciado pela plataforma marketing.";
         let framework = "Desconhecido";
         let port = 0;
+        let prodUrl = undefined;
         
         // Nome e Descrição do metadata.json
         if (existsSync(metadataPath)) {
-          const metadata: SiteMetadata = JSON.parse(readFileSync(metadataPath, "utf-8"));
+          const metadata = JSON.parse(readFileSync(metadataPath, "utf-8"));
           name = metadata.name || id;
           description = metadata.description || description;
+          prodUrl = metadata.prodUrl;
         }
 
         // Framework e Porta do package.json
@@ -80,7 +83,8 @@ export default function Home() {
           framework, 
           filesCount, 
           port,
-          status: 'online' // Assumimos online se carregar
+          status: 'online',
+          prodUrl
         };
       });
     }
@@ -130,7 +134,11 @@ export default function Home() {
         <section className="flex flex-col gap-6">
           <div className="flex justify-between items-end border-b border-zinc-800 pb-4">
              <h2 className="text-2xl font-bold tracking-tight">Sites do Ecossistema</h2>
-             <span className="text-zinc-500 text-sm font-medium">Sincronizado com GitHub</span>
+             <div className="flex items-center gap-4">
+                <span className="text-zinc-500 text-sm font-medium">Sincronizado com Vercel</span>
+                <div className="w-[1px] h-4 bg-zinc-800" />
+                <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Multi-Tenant Isolation Ativo</span>
+             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -146,39 +154,61 @@ export default function Home() {
                       alt={site.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 group-hover:opacity-100 bg-zinc-800"
                    />
-                   <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold border border-white/10 uppercase tracking-tighter">
+                   <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold border border-white/10 uppercase tracking-tighter flex items-center gap-2">
+                     <span className="w-1 h-1 bg-blue-500 rounded-full" />
                      {site.framework}
                    </div>
+                   {site.prodUrl && (
+                    <div className="absolute top-4 right-4 bg-green-500/20 text-green-400 backdrop-blur-md px-2 py-1 rounded text-[9px] font-black border border-green-500/30 uppercase tracking-tighter">
+                      Publicado
+                    </div>
+                   )}
                 </div>
 
                 <div className="p-6 flex flex-col gap-4">
                   <div>
                     <h3 className="text-xl font-extrabold text-zinc-100 group-hover:text-white transition-colors">{site.name}</h3>
-                    <p className="text-zinc-500 text-sm mt-3 leading-relaxed min-h-[40px] line-clamp-2">{site.description}</p>
+                    <p className="text-zinc-500 text-sm mt-3 leading-relaxed min-h-[40px] line-clamp-2 italic">
+                       {site.description}
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between text-[11px] font-bold text-zinc-600 uppercase border-y border-zinc-900 py-3 mt-2 tracking-widest">
                     <span>{site.filesCount} Arquivos</span>
                     <span className="flex items-center gap-1.5 font-black text-white">
                       <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                      Porta: {site.port}
+                      Local: {site.port}
                     </span>
                   </div>
 
-                  <div className="flex gap-3 mt-2">
-                    <a 
-                      href={`#`} 
-                      className="flex-1 bg-zinc-900 hover:bg-zinc-800 text-[11px] font-black uppercase tracking-widest py-3 rounded-lg text-center transition-all border border-transparent hover:border-zinc-700"
-                    >
-                      Editar IA
-                    </a>
-                    <a 
-                      href={`http://localhost:${site.port}`} 
-                      target="_blank" 
-                      className="flex-1 bg-blue-600 hover:bg-blue-500 text-[11px] font-black uppercase tracking-widest py-3 rounded-lg text-center transition-all shadow-lg shadow-blue-500/10"
-                    >
-                      Visualizar
-                    </a>
+                  <div className="flex flex-col gap-2 mt-2">
+                    <div className="flex gap-2">
+                      <a 
+                        href={`http://localhost:${site.port}`} 
+                        target="_blank" 
+                        className="flex-1 bg-zinc-900 hover:bg-zinc-800 text-[10px] font-black uppercase tracking-widest py-3 rounded-lg text-center transition-all border border-transparent hover:border-zinc-700"
+                      >
+                        Local Preview
+                      </a>
+                      {site.prodUrl ? (
+                         <a 
+                          href={site.prodUrl} 
+                          target="_blank" 
+                          className="flex-1 bg-blue-600 hover:bg-blue-500 text-[10px] font-black uppercase tracking-widest py-3 rounded-lg text-center transition-all shadow-lg shadow-blue-500/20"
+                        >
+                          Produção
+                        </a>
+                      ) : (
+                        <button 
+                          className="flex-1 bg-zinc-800 text-zinc-500 text-[10px] font-black uppercase tracking-widest py-3 rounded-lg text-center cursor-not-allowed opacity-50"
+                        >
+                          Não Publicado
+                        </button>
+                      )}
+                    </div>
+                    <button className="w-full bg-zinc-950 hover:bg-white hover:text-black border border-zinc-800 text-[10px] font-black uppercase tracking-[0.2em] py-2 rounded-md transition-all">
+                       Gerenciar Ativos via IA &rarr;
+                    </button>
                   </div>
                 </div>
               </div>

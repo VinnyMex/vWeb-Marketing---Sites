@@ -1,5 +1,5 @@
 {
-  "name": "General das Chaves - vWeb Marketing",
-  "description": "Site futurista para General das Chaves com layout minimalista, glassmorphism e animações modernas.",
-  "requestFramePermissions": []
+  "name": "General das Chaves",
+  "description": "Serviços de chaveiro profissional em tempo real. Segurança e agilidade para sua residência ou veículo.",
+  "prodUrl": "https://vweb-general-das-chaves.vercel.app"
 }

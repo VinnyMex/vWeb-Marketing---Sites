@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "buildCommand": "npm install --prefix vweb-management && npm run build --prefix vweb-management",
+  "outputDirectory": "vweb-management/.next",
+  "installCommand": "npm install --prefix vweb-management",
+  "framework": "nextjs"
+}
