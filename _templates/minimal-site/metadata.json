@@ -1,0 +1,6 @@
+{
+  "name": "Template Minimalista",
+  "port": 3100,
+  "framework": "Next.js",
+  "prodUrl": ""
+}

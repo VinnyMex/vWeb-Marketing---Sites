@@ -1,0 +1,18 @@
+{
+  "name": "vweb-marketing-sites",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "vweb-management",
+    "_sites/*"
+  ],
+  "scripts": {
+    "dev:hub": "npm run dev --workspace=vweb-management",
+    "build": "npm run build --workspace=vweb-management",
+    "start": "npm run start --workspace=vweb-management",
+    "deploy:hub": "vercel --prod"
+  },
+  "devDependencies": {
+    "vercel": "latest"
+  }
+}

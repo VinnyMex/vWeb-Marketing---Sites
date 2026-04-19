@@ -1,5 +1,7 @@
 import { readdirSync, existsSync, readFileSync, statSync } from "fs";
 import path from "path";
+import { DashboardClient } from "@/components/DashboardClient";
+import { ManageAssetsButton } from "@/components/ManageAssetsButton";
 
 interface SiteMetadata {
   name?: string;
@@ -125,10 +127,7 @@ export default function Home() {
             <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mb-1">Arquivos Totais</p>
             <p className="text-3xl font-bold">{sites.reduce((acc, s) => acc + s.filesCount, 0)}</p>
           </div>
-          <button className="bg-white hover:bg-zinc-200 text-black p-6 rounded-2xl flex flex-col justify-center items-center gap-1 transition-all">
-             <span className="text-lg font-bold">Novo Projeto</span>
-             <span className="text-[10px] items-center flex gap-1 font-bold uppercase">Prompt IA &rarr;</span>
-          </button>
+          <DashboardClient />
         </div>
 
         <section className="flex flex-col gap-6">
@@ -206,9 +205,7 @@ export default function Home() {
                         </button>
                       )}
                     </div>
-                    <button className="w-full bg-zinc-950 hover:bg-white hover:text-black border border-zinc-800 text-[10px] font-black uppercase tracking-[0.2em] py-2 rounded-md transition-all">
-                       Gerenciar Ativos via IA &rarr;
-                    </button>
+                    <ManageAssetsButton siteId={site.id} siteName={site.name} />
                   </div>
                 </div>
               </div>
