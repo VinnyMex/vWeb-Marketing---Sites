@@ -87,7 +87,7 @@ export default function Home() {
                    <div className="w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center font-bold text-zinc-400 group-hover:text-blue-400 transition-colors">
                      {site.id.substring(0, 2).toUpperCase()}
                    </div>
-                   <span className="text-[10px] bg-zinc-900 text-zinc-500 px-2 py-1 rounded uppercase tracking-wider">Dev Port: {site.id === 'General-das-chaves' ? '3001' : 'Auto'}</span>
+                   <span className="text-[10px] bg-zinc-900 text-zinc-500 px-2 py-1 rounded uppercase tracking-wider">Dev Port: {site.id === 'General-das-chaves' ? '3007' : 'Auto'}</span>
                 </div>
                 
                 <div>
