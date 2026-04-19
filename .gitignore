@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+.env
+.DS_Store
+*.log
+vweb-management/.next
+vweb-management/node_modules
+_sites/*/node_modules
+_sites/*/dist
+antigravity mcp list.txt
+mcp-config.md
