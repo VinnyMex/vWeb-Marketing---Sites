@@ -1,0 +1,6 @@
+{
+  "name": "Salgados Mônica",
+  "port": 3009,
+  "framework": "Next.js",
+  "prodUrl": "https://vweb-salgados-monica.vercel.app"
+}

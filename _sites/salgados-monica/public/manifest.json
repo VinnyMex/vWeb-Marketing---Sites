@@ -1,0 +1,21 @@
+{
+  "name": "Salgados Mônica",
+  "short_name": "Mônica Silva",
+  "description": "Encomende seus salgados artesanais de forma simples e rápida.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#9E3E23",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/monica/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/monica/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

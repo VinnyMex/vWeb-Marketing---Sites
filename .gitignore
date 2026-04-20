@@ -1,4 +1,5 @@
 node_modules
+node_modules_old
 .next
 dist
 .env
@@ -6,7 +7,9 @@ dist
 *.log
 vweb-management/.next
 vweb-management/node_modules
+vweb-management/node_modules_old
 _sites/*/node_modules
 _sites/*/dist
+_sites/*/data
 antigravity mcp list.txt
 mcp-config.md

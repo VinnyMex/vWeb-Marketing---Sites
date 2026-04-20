@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-brand-primary: #9E3E23; /* Rust */
+  --color-brand-secondary: #C68A12; /* Gold */
+  --color-brand-accent: #E5E0D8; /* Light Beige Border */
+  --color-brand-cream: #FAF7F2; /* Warm Body BG */
+  --color-brand-dark: #321B13; /* Bold Dark Brown Text */
+  --color-brand-footer: #FDFCF0; /* Light Summary Footer */
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-brand-dark font-sans antialiased touch-pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    @apply bg-brand-primary/20 text-brand-primary;
+  }
+
+  /* Custom scrollbar for better artisan feel */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-cream;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-primary/20 rounded-full border-4 border-brand-cream hover:bg-brand-primary/40 transition-colors;
+  }
+}

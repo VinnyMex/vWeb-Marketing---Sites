@@ -1,5 +1,5 @@
 {
-  "name": "vweb-management",
+  "name": "vweb-management-v2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
   "dependencies": {
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.3.4",
-    "lucide-react": "^1.8.0",
+    "lucide-react": "^0.477.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4"
