@@ -1,127 +1,95 @@
-import { Product, Order, Customer, CustomerDetails, OrderStatus } from '../types';
+import { supabase } from './supabase';
+import { Product, Order, Customer, OrderStatus, CustomerDetails } from '../types';
 import { PRODUCTS as DEFAULT_PRODUCTS } from '../data';
 
-const API_URL = 'http://localhost:3011/api';
-
-let dbCache: {
-  products: Product[];
-  orders: Order[];
-  customers: Customer[];
-} = {
-  products: [],
-  orders: [],
-  customers: []
-};
-
+// O Supabase será nosso banco de dados real para o Vercel
 export const db = {
   init: async () => {
-    try {
-      const response = await fetch(`${API_URL}/db`);
-      const data = await response.json();
-      dbCache = data;
-      if (dbCache.products.length === 0) {
-        dbCache.products = DEFAULT_PRODUCTS;
-        await db.sync();
-      }
-    } catch (e) { console.error('DB Init Error', e); }
+    // No Supabase a inicialização é automática via cliente
   },
 
   sync: async () => {
-    try {
-      await fetch(`${API_URL}/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dbCache)
-      });
-      window.dispatchEvent(new Event('db-updated'));
-    } catch (e) { console.error('Sync Error', e); }
+    // Sincronização automática via Supabase
   },
 
   // PRODUCTS
-  getProducts: () => dbCache.products,
+  getProducts: async (): Promise<Product[]> => {
+    const { data, error } = await supabase.from('products').select('*');
+    if (error || !data || data.length === 0) return DEFAULT_PRODUCTS;
+    return data;
+  },
+  
   updateProduct: async (id: string, updates: Partial<Product>) => {
-    dbCache.products = dbCache.products.map(p => p.id === id ? { ...p, ...updates } : p);
-    await db.sync();
-    return dbCache.products;
+    await supabase.from('products').update(updates).eq('id', id);
+    window.dispatchEvent(new Event('db-updated'));
   },
+
   addProduct: async (product: Omit<Product, 'id'>) => {
-    const newProduct = { ...product, id: Date.now().toString() };
-    dbCache.products = [...dbCache.products, newProduct as Product];
-    await db.sync();
-    return dbCache.products;
+    await supabase.from('products').insert([product]);
+    window.dispatchEvent(new Event('db-updated'));
   },
+
   deleteProduct: async (id: string) => {
-    dbCache.products = dbCache.products.filter(p => p.id !== id);
-    await db.sync();
-    return dbCache.products;
+    await supabase.from('products').delete().eq('id', id);
+    window.dispatchEvent(new Event('db-updated'));
   },
 
   // ORDERS
-  getOrders: () => dbCache.orders,
-  addOrder: async (order: Omit<Order, 'id' | 'dateCreated' | 'status'>) => {
-    const newOrder: Order = {
-      ...order,
-      id: `PED-${Date.now()}`,
-      dateCreated: new Date().toISOString(),
-      status: 'pending'
-    };
-    dbCache.orders.push(newOrder);
-    
-    // Atualizar dados do cliente
-    const details = order.customer;
-    const existingIndex = dbCache.customers.findIndex(c => c.phone === details.phone);
-    if (existingIndex > -1) {
-      dbCache.customers[existingIndex] = {
-        ...dbCache.customers[existingIndex],
-        name: details.name,
-        address: details.address,
-        neighborhood: details.neighborhood,
-        reference: details.reference,
-        lastOrderDate: newOrder.dateCreated,
-        totalOrders: dbCache.customers[existingIndex].totalOrders + 1,
-        totalSpent: dbCache.customers[existingIndex].totalSpent + order.subtotal
-      };
-    } else {
-      dbCache.customers.push({
-        phone: details.phone,
-        name: details.name,
-        address: details.address,
-        neighborhood: details.neighborhood,
-        reference: details.reference,
-        lastOrderDate: newOrder.dateCreated,
-        totalOrders: 1,
-        totalSpent: order.subtotal
-      });
-    }
+  getOrders: async (): Promise<Order[]> => {
+    const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+    return data || [];
+  },
 
-    await db.sync();
-    return newOrder;
+  addOrder: async (order: Omit<Order, 'id' | 'dateCreated' | 'status'>) => {
+    const { data, error } = await supabase.from('orders').insert([{
+      customer: order.customer,
+      items: order.items,
+      subtotal: order.subtotal,
+      status: 'pending'
+    }]).select();
+    
+    window.dispatchEvent(new Event('db-updated'));
+    return data ? data[0] : null;
   },
+
   updateOrderStatus: async (id: string, status: OrderStatus) => {
-    dbCache.orders = dbCache.orders.map(o => o.id === id ? { ...o, status } : o);
-    await db.sync();
+    await supabase.from('orders').update({ status }).eq('id', id);
+    window.dispatchEvent(new Event('db-updated'));
   },
+
   deleteOrder: async (id: string) => {
-    dbCache.orders = dbCache.orders.filter(o => o.id !== id);
-    await db.sync();
+    await supabase.from('orders').delete().eq('id', id);
+    window.dispatchEvent(new Event('db-updated'));
   },
-  getPendingOrderByPhone: (phone: string) => {
-    return dbCache.orders.find(o => o.customer.phone === phone && o.status === 'pending');
+
+  getPendingOrderByPhone: async (phone: string): Promise<Order | null> => {
+    const { data } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('customer->phone', phone)
+      .eq('status', 'pending')
+      .single();
+    return data;
   },
+
   updateOrderItems: async (id: string, items: any[], subtotal: number, customer: CustomerDetails) => {
-    dbCache.orders = dbCache.orders.map(o => 
-      o.id === id ? { ...o, items, subtotal, customer, dateCreated: new Date().toISOString() } : o
-    );
-    await db.sync();
+    await supabase.from('orders').update({ items, subtotal, customer }).eq('id', id);
+    window.dispatchEvent(new Event('db-updated'));
   },
 
   // CUSTOMERS
-  getCustomers: () => dbCache.customers,
-  getCustomerByPhone: (phone: string) => dbCache.customers.find(c => c.phone === phone),
+  getCustomers: async (): Promise<Customer[]> => {
+    const { data } = await supabase.from('customers').select('*').order('totalSpent', { ascending: false });
+    return data || [];
+  },
+
+  getCustomerByPhone: async (phone: string): Promise<Customer | null> => {
+    const { data } = await supabase.from('customers').select('*').eq('phone', phone).single();
+    return data;
+  },
+
   deleteCustomer: async (phone: string) => {
-    dbCache.customers = dbCache.customers.filter(c => c.phone !== phone);
-    await db.sync();
+    await supabase.from('customers').delete().eq('phone', phone);
+    window.dispatchEvent(new Event('db-updated'));
   }
 };
-
-db.init();
