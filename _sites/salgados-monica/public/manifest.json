@@ -1,21 +1,25 @@
 {
-  "name": "Salgados Mônica",
-  "short_name": "Mônica Silva",
-  "description": "Encomende seus salgados artesanais de forma simples e rápida.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#FAF7F2",
-  "theme_color": "#9E3E23",
+  "short_name": "Salgados Mônica",
+  "name": "Salgados Mônica - O Legítimo Sabor de Niterói",
   "icons": [
     {
-      "src": "https://picsum.photos/seed/monica/192/192",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     },
     {
-      "src": "https://picsum.photos/seed/monica/512/512",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=192&h=192&fit=crop",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=512&h=512&fit=crop",
+      "type": "image/png",
+      "sizes": "512x512"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#9E3E23",
+  "background_color": "#FAF7F2"
 }

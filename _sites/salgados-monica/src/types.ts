@@ -25,7 +25,7 @@ export interface CustomerDetails {
   observations?: string;
 }
 
-export type OrderStatus = 'pending' | 'scheduled' | 'processing' | 'separated' | 'ready' | 'cancelled';
+export type OrderStatus = 'pending' | 'scheduled' | 'processing' | 'separated' | 'ready' | 'completed' | 'cancelled';
 
 export interface Order {
   id: string;
@@ -43,6 +43,6 @@ export interface Customer {
   neighborhood: string;
   reference: string;
   lastOrderDate: string;
-  totalOrders: number;
-  totalSpent: number;
+  total_orders: number;
+  total_spent: number;
 }

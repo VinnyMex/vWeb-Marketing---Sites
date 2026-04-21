@@ -14,23 +14,62 @@
 }
 
 @layer base {
-  body {
-    @apply bg-brand-cream text-brand-dark font-sans antialiased touch-pan-y;
-    -webkit-tap-highlight-color: transparent;
-  }
-
   ::selection {
     @apply bg-brand-primary/20 text-brand-primary;
   }
 
-  /* Custom scrollbar for better artisan feel */
-  ::-webkit-scrollbar {
-    width: 10px;
+  body {
+    @apply bg-brand-cream text-brand-dark font-sans antialiased touch-pan-y overflow-x-hidden;
+    -webkit-tap-highlight-color: transparent;
   }
-  ::-webkit-scrollbar-track {
-    @apply bg-brand-cream;
+
+
+  /* Fix for anchored links with fixed header */
+  #catalogo, #quem-somos, #duvidas {
+    scroll-margin-top: 100px;
   }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-brand-primary/20 rounded-full border-4 border-brand-cream hover:bg-brand-primary/40 transition-colors;
+}
+
+@layer components {
+  .touch-target {
+    @apply min-h-[56px] min-w-[56px] flex items-center justify-center cursor-pointer active:scale-95 transition-transform;
   }
+
+  .elderly-input {
+    @apply w-full h-16 px-6 text-xl font-black bg-stone-50 border-4 border-brand-accent rounded-2xl outline-none focus:border-brand-primary focus:bg-white transition-all shadow-inner placeholder:text-stone-300;
+  }
+
+  .elderly-label {
+    @apply block text-sm font-black text-brand-dark uppercase tracking-widest mb-2 pl-2;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .animate-bounce-slow {
+    animation: bounce 3s infinite;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-5%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Hide number input spinners/arrows */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

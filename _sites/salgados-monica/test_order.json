@@ -1,0 +1,16 @@
+{
+  "customer": {
+    "name": "Teste de Persistência",
+    "phone": "11999999999",
+    "address": "Rua de Teste, 123",
+    "neighborhood": "Centro"
+  },
+  "items": [
+    {
+      "product": { "name": "Coxinha", "price": 5.0 },
+      "quantity": 10
+    }
+  ],
+  "subtotal": 50.0,
+  "status": "pending"
+}
