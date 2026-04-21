@@ -98,7 +98,7 @@ export const db = {
       const customerInfo = {
         phone: order.customer.phone.replace(/\D/g, ''),
         name: order.customer.name,
-        address: order.customer.address + (order.customer.number ? `, Num: ${order.customer.number}` : ''),
+        address: order.customer.address,
         neighborhood: order.customer.neighborhood,
         reference: order.customer.reference,
         lastOrderDate: new Date().toISOString(),

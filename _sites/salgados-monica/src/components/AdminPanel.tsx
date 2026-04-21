@@ -36,16 +36,26 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
   useEffect(() => {
     const fetchData = async () => {
        await db.init();
-       setProducts(db.getProducts());
-       setOrders(db.getOrders());
-       setCustomers(db.getCustomers().sort((a, b) => b.totalSpent - a.totalSpent));
+       const [p, o, c] = await Promise.all([
+         db.getProducts(),
+         db.getOrders(),
+         db.getCustomers()
+       ]);
+       setProducts(p);
+       setOrders(o);
+       setCustomers(c.sort((a, b) => b.total_spent - a.total_spent));
     };
     fetchData();
 
-    const handleDbUpdate = () => {
-       setProducts(db.getProducts());
-       setOrders(db.getOrders());
-       setCustomers(db.getCustomers().sort((a, b) => b.totalSpent - a.totalSpent));
+    const handleDbUpdate = async () => {
+       const [p, o, c] = await Promise.all([
+         db.getProducts(),
+         db.getOrders(),
+         db.getCustomers()
+       ]);
+       setProducts(p);
+       setOrders(o);
+       setCustomers(c.sort((a, b) => b.total_spent - a.total_spent));
     };
 
     window.addEventListener('db-updated', handleDbUpdate);
